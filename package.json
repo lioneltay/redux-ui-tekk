@@ -1,12 +1,77 @@
 {
   "name": "redux-ui-tekk",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.0.1",
+  "description": "UI state management for React with Redux",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lioneltay/redux-ui-tekk.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "peerDependencies": {
+    "react": "^15.5.4"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0",
+    "ramda": "^0.25.0",
+    "react": "^15.6.2",
+    "react-redux": "^5.0.6",
+    "recompose": "^0.26.0",
+    "redux": "^3.7.2"
+  },
+  "scripts": {
+    "test": "jest",
+    "start": "webpack --watch",
+    "build": "webpack"
+  },
+  "author": {
+    "name": "Lionel Tay",
+    "email": "lionel.tay@outlook.com"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.1.6",
+    "@types/enzyme-adapter-react-15": "^1.0.1",
+    "@types/enzyme-adapter-react-16": "^1.0.1",
+    "@types/jest": "^21.1.9",
+    "@types/prop-types": "^15.5.2",
+    "@types/ramda": "^0.25.9",
+    "@types/react": "^16.0.31",
+    "@types/react-dom": "^16.0.3",
+    "@types/react-redux": "^5.0.14",
+    "@types/recompose": "^0.24.4",
+    "@types/redux": "^3.6.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.5.1",
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-15": "^1.0.5",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "jest": "^22.0.4",
+    "react-dom": "^15.5.4",
+    "ts-jest": "^22.0.0",
+    "ts-loader": "^3.2.0",
+    "typescript": "^2.6.2",
+    "webpack": "^2.6.1"
+  },
+  "keywords": [
+    "redux",
+    "react",
+    "ui",
+    "tekk",
+
+    "redux-ui-tekk",
+
+    "state",
+    "management"
+  ],
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "testEnvironment": "jsdom"
+  }
 }

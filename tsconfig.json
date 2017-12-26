@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "module": "es2015",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true
+  },
+  "include": [
+    "src"
+  ],
+  "compileOnSave": false
+}
