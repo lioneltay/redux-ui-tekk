@@ -98,6 +98,19 @@ export const removeStateAtPath = (uiState, path) => {
   return R.dissocPath(path, uiState)
 }
 
+export const callIfFunc = R.curry(
+  (vals: any[], candidate) =>
+    typeof candidate === "function" ? candidate(...vals) : candidate
+)
+
+export const noop = () => {}
+
+let id = 1
+const getId = () => id++
+export const generateKey = Comp => {
+  return `${Comp.displayName || Comp.name}_Key_${getId()}`
+}
+
 export const __TEST__ = {
   updateStateTree,
   splitValues,

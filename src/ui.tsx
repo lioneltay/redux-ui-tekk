@@ -5,21 +5,13 @@ import * as R from "ramda"
 import { pure } from "recompose"
 
 import { mountComponent, unmountComponent, updateState } from "./actions"
-import { getAccessibleState, getStateAtPath } from "./helpers"
-
-const noop = () => {}
-
-// TODO: get proper unique ids
-let id = 1
-const getId = () => id++
-const generateKey = Comp => {
-  return `${Comp.displayName || Comp.name}_Key_${getId()}`
-}
-
-const callIfFunc = R.curry(
-  (vals: any[], candidate) =>
-    typeof candidate === "function" ? candidate(...vals) : candidate
-)
+import {
+  getAccessibleState,
+  getStateAtPath,
+  callIfFunc,
+  noop,
+  generateKey,
+} from "./helpers"
 
 export interface UIProps {
   uiState: object
