@@ -3,7 +3,7 @@ import * as R from "ramda"
 /*
   return the next state once the component at path has been updated
 */
-const updateStateAtPath = (uiState, path, values) => {
+export const updateStateAtPath = (uiState, path, values) => {
   const localState = getStateAtPath(uiState, path)
   const { localValues } = splitValues(localState, values)
   // const newLocalState = R.merge(localState, localValues)

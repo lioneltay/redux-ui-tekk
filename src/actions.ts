@@ -1,6 +1,4 @@
-const PREFIX = "@@redux-ui-tekk__"
-
-const actionName = name => `${PREFIX}${name}`
+import { actionName } from "./constants"
 
 export const UPDATE_STATE = actionName("UPDATE_STATE")
 export const MOUNT_COMPONENT = actionName("MOUNT_COMPONENT")
@@ -15,9 +13,18 @@ export const updateState = ({ componentPath, state }: UpdateState) => ({
   payload: { componentPath, state },
 })
 
-export const mountComponent = ({ componentPath, state }: UpdateState) => ({
+interface MountComponent {
+  componentPath: string[]
+  state: object
+  reducer: any
+}
+export const mountComponent = ({
+  componentPath,
+  state,
+  reducer,
+}: MountComponent) => ({
   type: MOUNT_COMPONENT,
-  payload: { componentPath, state },
+  payload: { componentPath, state, reducer },
 })
 
 interface UnmountComponent {

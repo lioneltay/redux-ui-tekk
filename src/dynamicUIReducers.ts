@@ -1,34 +1,43 @@
-import { path, assocPath } from "ramda"
+import { getStateAtPath, updateStateAtPath } from "./helpers"
+import { assoc } from "ramda"
 
 export default function dynamicUIReducers(createStore) {
-  return (reducer, ...args) => {
-    const store = createStore(reducer, ...args)
+  return (originalReducer, ...args) => {
+    const store = createStore(originalReducer, ...args)
 
     let reducers = []
 
     function generateReducer() {
       return (state, action) => {
-        // const newState = state
-        const newState = reducers.reduce(
-          (currentState, { path: statePath, reducer }) => {
-            const localState = path(statePath, currentState)
-            const newLocalState = reducer(localState, action)
-            const newState = assocPath(statePath, newLocalState, state)
-            return newState
-          },
-          state
-        )
+        const newState = reducers.reduce((currentState, { path, reducer }) => {
+          if (!currentState) {
+            return currentState
+          }
 
-        return reducer(newState, action)
+          const localState = getStateAtPath(currentState.ui, path)
+          const newLocalState = reducer(localState, action)
+          return newLocalState
+            ? assoc(
+                "ui",
+                updateStateAtPath(currentState.ui, path, newLocalState),
+                currentState
+              )
+            : currentState
+        }, state)
+
+        // const newState = state
+        return originalReducer(newState, action)
       }
     }
 
     function addUIReducer({ path, reducer }) {
+      console.log("adding reducer", path)
       reducers.push({ path, reducer })
       store.replaceReducer(generateReducer())
     }
 
     function removeUIReducer(oldReducer) {
+      console.log("removing reducer", path)
       reducers = reducers.filter(({ reducer }) => reducer !== oldReducer)
       store.replaceReducer(generateReducer())
     }
@@ -37,6 +46,7 @@ export default function dynamicUIReducers(createStore) {
       ...store,
       addUIReducer,
       removeUIReducer,
+      uiReducers: reducers,
     }
   }
 }

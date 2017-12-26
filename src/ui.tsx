@@ -17,7 +17,7 @@ const generateKey = Comp => {
 }
 
 const callIfFunc = R.curry(
-  (vals, candidate) =>
+  (vals: any[], candidate) =>
     typeof candidate === "function" ? candidate(...vals) : candidate
 )
 
@@ -30,15 +30,17 @@ export interface UIProps {
   dispatch(action: object): any
 }
 
+type Reducer = (state: object, action: object) => object
+
 interface UIConfig {
   key?: string
   initialState?: object
   selector?(state: any, props?: any, wholeState?: any): any
-  validation?: object
+  reducer?: { [key: string]: Reducer }
 }
 
 const ui = (
-  { key, initialState = {}, selector = noop, validation }: UIConfig = {
+  { key, initialState = {}, selector = noop, reducer }: UIConfig = {
     initialState: {},
     selector: noop,
   }
@@ -71,6 +73,7 @@ const ui = (
     static contextTypes = {
       // Where the ui state for the parent component is mounted
       componentPath: PropTypes.array,
+      store: PropTypes.object.isRequired,
     }
 
     static childContextTypes = {
@@ -103,6 +106,7 @@ const ui = (
           [accessibleState, this.props, this.props.wholeState],
           initialState
         ),
+        reducer,
       })
     }
 
