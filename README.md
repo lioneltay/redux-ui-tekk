@@ -53,7 +53,19 @@ export default class Demo extends Component {
 
 ## Overview
 
-## Exports
+The aim is to provide a simple and flexible way to model ui state.
+
+## Recipes
+
+* removing the use of setState (replace setState with updateState, replace state constructor with initialState configuration)
+* Modal Component (using the reducer configuration)
+* Meaningful demo
+* Show that ui state managent can replace setState, and allows easy lifting of state
+  * common pattern to lift state into parent components when many siblings need to access the same state
+  * using setState require the parent component to become a class component and be aware of the additional state that it needs to pass down to its children even if it doesn't use the state itself
+  * uiState simply requires you to move the state declaration to the parent component. The parent component need not be aware of the change
+
+## API
 
 ### ui(config: UIConfig)(Comp: ReactComponent): ReactComponent
 
