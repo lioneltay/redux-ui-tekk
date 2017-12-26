@@ -1,5 +1,56 @@
 # redux-ui-tekk
 
+## Quick Start
+
+```typescript
+import React, { Component } from "react"
+import { ui } from "redux-ui-tekk"
+
+const ParentComponent = ui({
+  initialState: {
+    parentValue: "parentValue",
+  },
+  selector: (uiState, props, wholeState) => ({
+    parentValue: uiState.parentValue,
+    childValue: uiState.childvalue, // Not accessible by parent
+  }),
+})(({ parentValue, childValue }) => (
+  <div>
+    <h2>Parent Component</h2>
+    <pre>{parentValue}</pre>
+    <pre>{childValue}</pre>
+    <ChildComponent />
+  </div>
+))
+
+const ChildComponent = ui({
+  initialState: {
+    childValue: "childValue",
+  },
+  selector: (uiState, props, wholeState) => ({
+    parentValue: uiState.parentValue,
+    childValue: uiState.childvalue,
+  }),
+})(({ childValue, parentValue }) => (
+  <div>
+    <h2>Child Component</h2>
+    <pre>{parentValue}</pre>
+    <pre>{childValue}</pre>
+  </div>
+))
+
+export default class Demo extends Component {
+  render() {
+    return (
+      <div>
+        <h1>Demo</h1>
+        <ParentComponent />
+      </div>
+    )
+  }
+}
+```
+
 ## Overview
 
 ## Exports
