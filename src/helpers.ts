@@ -53,7 +53,11 @@ if the root level is reached and not all properties in the value object have bee
   the variable doesnt exist
 Every update will only require a single action to update the store, more efficient
 */
-export const updateStateTree = (prevUIState, currentPath, valueObj) => {
+export const updateStateTree = (
+  prevUIState: object,
+  currentPath: string[],
+  valueObj: object
+): object => {
   let uiState = { ...prevUIState }
   let path = currentPath
   let values = { ...valueObj }

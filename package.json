@@ -20,7 +20,7 @@
   },
   "scripts": {
     "test": "jest",
-    "start": "webpack --watch",
+    "dev": "webpack --watch",
     "build": "webpack"
   },
   "author": {
@@ -37,6 +37,7 @@
     "@types/react": "^16.0.31",
     "@types/react-dom": "^16.0.3",
     "@types/react-redux": "^5.0.14",
+    "@types/react-test-renderer": "^16.0.0",
     "@types/recompose": "^0.24.4",
     "@types/redux": "^3.6.0",
     "babel-cli": "^6.24.1",
@@ -50,6 +51,7 @@
     "enzyme-adapter-react-16": "^1.1.1",
     "jest": "^22.0.4",
     "react-dom": "^15.5.4",
+    "react-test-renderer": "^15.6.2",
     "ts-jest": "^22.0.0",
     "ts-loader": "^3.2.0",
     "typescript": "^2.6.2",
@@ -69,14 +71,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "testEnvironment": "jsdom"
   }
 }

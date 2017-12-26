@@ -7209,11 +7209,14 @@ var getId = function () { return id++; };
 var generateKey = function (Comp) {
     return (Comp.displayName || Comp.name) + "_Key_" + getId();
 };
-var callIfFunc = __WEBPACK_IMPORTED_MODULE_3_ramda__["m" /* curry */](function (val, candidate) {
-    return typeof candidate === "function" ? candidate(val) : candidate;
+var callIfFunc = __WEBPACK_IMPORTED_MODULE_3_ramda__["m" /* curry */](function (vals, candidate) {
+    return typeof candidate === "function" ? candidate.apply(void 0, vals) : candidate;
 });
 var ui = function (_a) {
-    var _b = _a === void 0 ? {} : _a, key = _b.key, _c = _b.initialState, initialState = _c === void 0 ? {} : _c, selector = _b.selector;
+    var _b = _a === void 0 ? {
+        initialState: {},
+        selector: noop,
+    } : _a, key = _b.key, _c = _b.initialState, initialState = _c === void 0 ? {} : _c, _d = _b.selector, selector = _d === void 0 ? noop : _d, validation = _b.validation;
     return function (Comp) {
         var generatedKey = key || generateKey(Comp);
         var EnhancedComp = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_recompose__["a" /* pure */])(Comp);
@@ -7232,9 +7235,9 @@ var ui = function (_a) {
                     var componentState = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers__["d" /* getStateAtPath */])(uiState, _this.componentPath);
                     var accessibleState = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers__["e" /* getAccessibleState */])(uiState, _this.componentPath);
                     var localState = __WEBPACK_IMPORTED_MODULE_3_ramda__["k" /* merge */](accessibleState, !componentState || __WEBPACK_IMPORTED_MODULE_3_ramda__["h" /* isEmpty */](componentState)
-                        ? callIfFunc(_this.props, initialState)
+                        ? callIfFunc([_this.props, _this.props.wholeState], initialState)
                         : componentState);
-                    return selector(localState, _this.props);
+                    return selector(localState, _this.props, _this.props.wholeState);
                 };
                 _this.key = generatedKey;
                 _this.componentPath = (_this.context.componentPath || []).concat(_this.key);
@@ -7246,9 +7249,10 @@ var ui = function (_a) {
                 };
             };
             UI.prototype.componentWillMount = function () {
+                var accessibleState = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers__["e" /* getAccessibleState */])(this.props.uiState, this.componentPath) || {};
                 this.props.mountComponent({
                     componentPath: this.componentPath,
-                    state: callIfFunc(this.props, initialState),
+                    state: callIfFunc([accessibleState, this.props, this.props.wholeState], initialState),
                 });
             };
             UI.prototype.componentWillUnmount = function () {
@@ -7257,13 +7261,14 @@ var ui = function (_a) {
             UI.prototype.render = function () {
                 var _a = this.props, uiState = _a.uiState, rest = __rest(_a, ["uiState"]);
                 var stateInitialised = !!__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_6__helpers__["d" /* getStateAtPath */])(this.props.uiState, this.componentPath);
-                return !stateInitialised ? null : (__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(EnhancedComp, __assign({}, rest, this.getState(), { updateState: this.updateState })));
+                return !stateInitialised ? null : (__WEBPACK_IMPORTED_MODULE_0_react___default.a.createElement(EnhancedComp, __assign({}, rest, this.getState(), { dispatch: this.props.dispatch, updateState: this.updateState })));
             };
             UI.propTypes = {
                 uiState: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.object.isRequired,
                 mountComponent: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired,
                 unmountComponent: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired,
                 updateState: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired,
+                dispatch: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.func.isRequired,
             };
             UI.contextTypes = {
                 // Where the ui state for the parent component is mounted
@@ -7274,12 +7279,32 @@ var ui = function (_a) {
             };
             UI = __decorate([
                 __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_react_redux__["a" /* connect */])(function (state) { return ({
+                    wholeState: state || {},
                     uiState: state.ui || {},
-                }); }, {
-                    mountComponent: __WEBPACK_IMPORTED_MODULE_5__actions__["d" /* mountComponent */],
-                    unmountComponent: __WEBPACK_IMPORTED_MODULE_5__actions__["e" /* unmountComponent */],
-                    updateState: __WEBPACK_IMPORTED_MODULE_5__actions__["f" /* updateState */],
-                })
+                }); }, function (dispatch) { return ({
+                    mountComponent: function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["d" /* mountComponent */].apply(void 0, args));
+                    },
+                    unmountComponent: function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["e" /* unmountComponent */].apply(void 0, args));
+                    },
+                    updateState: function () {
+                        var args = [];
+                        for (var _i = 0; _i < arguments.length; _i++) {
+                            args[_i] = arguments[_i];
+                        }
+                        return dispatch(__WEBPACK_IMPORTED_MODULE_5__actions__["f" /* updateState */].apply(void 0, args));
+                    },
+                    dispatch: dispatch,
+                }); })
             ], UI);
             return UI;
         }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));

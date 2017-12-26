@@ -192,6 +192,30 @@ test("updateStateTree: Supports updater functions (prevValuee) => nextValue", ()
   expect(updateStateTree(uiState, path, values)).toEqual(correctNextState)
 })
 
+test("updateStateTree: Throws an error when updating non-existant properties", () => {
+  const uiState = {
+    RootComponent: {
+      state: {
+        rootProp: "rootPropValue",
+      },
+      ChildComponent1: {
+        state: {
+          child1Prop: "child1PropValue",
+          child2Prop: "child2PropValue",
+        },
+      },
+    },
+  }
+
+  const path = ["RootComponent", "ChildComponent1"]
+
+  const values = {
+    nonExistant: "Updated_child1PropValue",
+  }
+
+  expect(() => updateStateTree(uiState, path, values)).toThrow()
+})
+
 test("getAccesibleState: Child access parent state", () => {
   const uiState = {
     RootComponent: {

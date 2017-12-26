@@ -142,7 +142,7 @@ test("updateState: should throw if there is an attempt to update a non existant 
     store.dispatch(
       updateState({
         componentPath: ["root", "child"],
-        state: { idontexist: "adjfasdf" },
+        state: { cow: "adjfasdf" },
       })
     )
   ).toThrow()

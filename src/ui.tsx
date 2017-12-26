@@ -17,25 +17,28 @@ const generateKey = Comp => {
 }
 
 const callIfFunc = R.curry(
-  (val, candidate) =>
-    typeof candidate === "function" ? candidate(val) : candidate
+  (vals, candidate) =>
+    typeof candidate === "function" ? candidate(...vals) : candidate
 )
 
 export interface UIProps {
   uiState: object
+  wholeState: object
   mountComponent(object: any): void
   unmountComponent(componentPath: string[]): void
   updateState: any
+  dispatch(action: object): any
 }
 
 interface UIConfig {
   key?: string
-  initialState: object
-  selector(state: any, props?: any): any
+  initialState?: object
+  selector?(state: any, props?: any, wholeState?: any): any
+  validation?: object
 }
 
 const ui = (
-  { key, initialState, selector }: UIConfig = {
+  { key, initialState = {}, selector = noop, validation }: UIConfig = {
     initialState: {},
     selector: noop,
   }
@@ -46,13 +49,15 @@ const ui = (
 
   @connect(
     state => ({
+      wholeState: state || {},
       uiState: state.ui || {},
     }),
-    {
-      mountComponent,
-      unmountComponent,
-      updateState,
-    }
+    dispatch => ({
+      mountComponent: (...args) => dispatch(mountComponent(...args)),
+      unmountComponent: (...args) => dispatch(unmountComponent(...args)),
+      updateState: (...args) => dispatch(updateState(...args)),
+      dispatch,
+    })
   )
   class UI extends Component<UIProps> {
     static propTypes = {
@@ -60,6 +65,7 @@ const ui = (
       mountComponent: PropTypes.func.isRequired,
       unmountComponent: PropTypes.func.isRequired,
       updateState: PropTypes.func.isRequired,
+      dispatch: PropTypes.func.isRequired,
     }
 
     static contextTypes = {
@@ -88,9 +94,15 @@ const ui = (
     }
 
     componentWillMount() {
+      const accessibleState =
+        getAccessibleState(this.props.uiState, this.componentPath) || {}
+
       this.props.mountComponent({
         componentPath: this.componentPath,
-        state: callIfFunc(this.props, initialState),
+        state: callIfFunc(
+          [accessibleState, this.props, this.props.wholeState],
+          initialState
+        ),
       })
     }
 
@@ -115,11 +127,11 @@ const ui = (
       const localState = R.merge(
         accessibleState,
         !componentState || R.isEmpty(componentState)
-          ? callIfFunc(this.props, initialState)
+          ? callIfFunc([this.props, this.props.wholeState], initialState)
           : componentState
       )
 
-      return selector(localState, this.props)
+      return selector(localState, this.props, this.props.wholeState)
     }
 
     render() {
@@ -133,6 +145,7 @@ const ui = (
         <EnhancedComp
           {...rest}
           {...this.getState()}
+          dispatch={this.props.dispatch}
           updateState={this.updateState}
         />
       )
