@@ -1,9 +1,10 @@
 import { UPDATE_STATE, MOUNT_COMPONENT, UNMOUNT_COMPONENT } from "./actions"
 import { updateStateTree, removeStateAtPath, addStateAtPath } from "./helpers"
+import { Action } from "./types"
 
 const initialState = {}
 
-const reducer = (state = initialState, action) => {
+const reducer = (state: object = initialState, action: Action) => {
   // console.log(JSON.stringify(action, null, 2))
 
   switch (action.type) {

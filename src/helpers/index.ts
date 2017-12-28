@@ -1,9 +1,14 @@
+import { ComponentPath, AnyObject, UIState } from "../types"
 import * as R from "ramda"
 
 /*
   return the next state once the component at path has been updated
 */
-export const updateStateAtPath = (uiState, path, values) => {
+export const updateStateAtPath = (
+  uiState: UIState,
+  path: ComponentPath,
+  values
+) => {
   const localState = getStateAtPath(uiState, path)
   const { localValues } = splitValues(localState, values)
   // const newLocalState = R.merge(localState, localValues)
@@ -18,7 +23,7 @@ export const updateStateAtPath = (uiState, path, values) => {
 
 // Given the path to the state of a particular component, return the path to the state of its parent component
 // If the current component is the root, return null
-const upOneLevel = path => {
+const upOneLevel = (path: ComponentPath) => {
   if (path.length === 1) {
     return []
   }
@@ -27,7 +32,7 @@ const upOneLevel = path => {
 }
 
 // Return the state of the component at a particular path
-export const getStateAtPath = (uiState, path) =>
+export const getStateAtPath = (uiState: UIState, path: ComponentPath) =>
   R.path(R.append("state", path), uiState)
 
 const splitValues = (localState, values) => {
@@ -79,7 +84,7 @@ export const updateStateTree = (
   return uiState
 }
 
-export const getAccessibleState = (uiState, path) => {
+export const getAccessibleState = (uiState, path: ComponentPath) => {
   let accessibleState = {}
 
   path.forEach((_, i, wholePath) => {
@@ -90,11 +95,11 @@ export const getAccessibleState = (uiState, path) => {
   return accessibleState
 }
 
-export const addStateAtPath = (uiState, path, value) => {
+export const addStateAtPath = (uiState, path: ComponentPath, value) => {
   return R.assocPath(R.append("state", path), value, uiState)
 }
 
-export const removeStateAtPath = (uiState, path) => {
+export const removeStateAtPath = (uiState, path: ComponentPath) => {
   return R.dissocPath(path, uiState)
 }
 

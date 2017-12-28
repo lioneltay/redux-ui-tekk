@@ -51,6 +51,12 @@ export default class Demo extends Component {
 }
 ```
 
+## Installation
+
+```
+npm install --save redux-ui-tekk
+```
+
 ## Overview
 
 The aim is to provide a simple and flexible way to model ui state.
@@ -113,8 +119,5 @@ const reducer = combineReducers({
   // ...whatever your heart desires
 })
 
-const store = createStore(
-  reducer,
-  composeEnhancers(applyMiddleware(uiMiddleware))
-)
+const store = createStore(reducer, applyMiddleware(uiMiddleware))
 ```

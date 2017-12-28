@@ -1,4 +1,5 @@
-import React, { Component } from "react"
+import { Reducer } from "./types"
+import React, { Component, ReactElement } from "react"
 import PropTypes from "prop-types"
 import { connect } from "react-redux"
 import * as R from "ramda"
@@ -22,8 +23,6 @@ export interface UIProps {
   dispatch(action: object): any
 }
 
-type Reducer = (state: object, action: object) => object
-
 interface UIConfig {
   key?: string
   initialState?: object
@@ -31,37 +30,34 @@ interface UIConfig {
   reducer?: { [key: string]: Reducer }
 }
 
-const ui = (
-  { key, initialState = {}, selector = noop, reducer }: UIConfig = {
-    initialState: {},
-    selector: noop,
-  }
-) => Comp => {
+const defaultConfig = {
+  initialState: {},
+  selector: noop,
+}
+
+const ui = ({
+  key,
+  initialState = {},
+  selector = noop,
+  reducer,
+}: UIConfig = defaultConfig) => (Comp: Component) => {
   const generatedKey = key || generateKey(Comp)
 
   const EnhancedComp = pure(Comp)
 
   @connect(
-    state => ({
+    (state: object) => ({
       wholeState: state || {},
       uiState: state.ui || {},
     }),
     dispatch => ({
-      mountComponent: (...args) => dispatch(mountComponent(...args)),
-      unmountComponent: (...args) => dispatch(unmountComponent(...args)),
-      updateState: (...args) => dispatch(updateState(...args)),
+      mountComponent: (options: any) => dispatch(mountComponent(options)),
+      unmountComponent: (options: any) => dispatch(unmountComponent(options)),
+      updateState: (options: any) => dispatch(updateState(options)),
       dispatch,
     })
   )
-  class UI extends Component<UIProps> {
-    static propTypes = {
-      uiState: PropTypes.object.isRequired,
-      mountComponent: PropTypes.func.isRequired,
-      unmountComponent: PropTypes.func.isRequired,
-      updateState: PropTypes.func.isRequired,
-      dispatch: PropTypes.func.isRequired,
-    }
-
+  class UI extends Component<UIProps, object> {
     static contextTypes = {
       // Where the ui state for the parent component is mounted
       componentPath: PropTypes.array,
@@ -81,7 +77,7 @@ const ui = (
     key: string
     componentPath: string[]
 
-    constructor(props, context) {
+    constructor(props: UIProps, context: object) {
       super(props, context)
 
       this.key = generatedKey
@@ -106,7 +102,7 @@ const ui = (
       this.props.unmountComponent(this.componentPath)
     }
 
-    updateState = state => {
+    updateState = (state: object) => {
       this.props.updateState({ state, componentPath: this.componentPath })
     }
 

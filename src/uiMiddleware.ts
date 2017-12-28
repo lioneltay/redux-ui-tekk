@@ -1,11 +1,12 @@
+import { Action } from "./types"
 import { getStateAtPath } from "./helpers"
 import { MOUNT_COMPONENT, UNMOUNT_COMPONENT, updateState } from "./actions"
 import * as R from "ramda"
 
-export default ({ getState, dispatch }) => next => {
+export default ({ getState, dispatch }) => (next: (action: Action) => void) => {
   const reducers = new Map()
 
-  return action => {
+  return (action: Action) => {
     if (action.type === MOUNT_COMPONENT) {
       const { componentPath, reducer } = action.payload
       if (reducer) {

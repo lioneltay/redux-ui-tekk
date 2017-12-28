@@ -7,6 +7,15 @@
     "type": "git",
     "url": "https://github.com/lioneltay/redux-ui-tekk.git"
   },
+  "scripts": {
+    "test": "jest",
+    "dev": "webpack --watch",
+    "build": "webpack"
+  },
+  "author": {
+    "name": "Lionel Tay",
+    "email": "lionel.tay@outlook.com"
+  },
   "peerDependencies": {
     "react": "^15.5.4"
   },
@@ -17,15 +26,6 @@
     "react-redux": "^5.0.6",
     "recompose": "^0.26.0",
     "redux": "^3.7.2"
-  },
-  "scripts": {
-    "test": "jest",
-    "dev": "webpack --watch",
-    "build": "webpack"
-  },
-  "author": {
-    "name": "Lionel Tay",
-    "email": "lionel.tay@outlook.com"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.6",
@@ -71,14 +71,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
     "testEnvironment": "jsdom"
   }
 }
