@@ -1,0 +1,42 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`mountComponent: 1`] = `
+Object {
+  "__meta": Object {
+    "child": Object {
+      "componentPath": Array [
+        "root",
+        "child",
+      ],
+      "key": "child",
+    },
+    "root": Object {
+      "componentPath": Array [
+        "root",
+      ],
+      "key": "root",
+    },
+    "root2": Object {
+      "componentPath": Array [
+        "root2",
+      ],
+      "key": "root2",
+    },
+  },
+  "root": Object {
+    "child": Object {
+      "state": Object {
+        "child": "child",
+      },
+    },
+    "state": Object {
+      "root": "root",
+    },
+  },
+  "root2": Object {
+    "state": Object {
+      "root2": "root2",
+    },
+  },
+}
+`;

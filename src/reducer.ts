@@ -1,12 +1,15 @@
 import { UPDATE_STATE, MOUNT_COMPONENT, UNMOUNT_COMPONENT } from "./actions"
-import { updateStateTree, removeStateAtPath, addStateAtPath } from "./helpers"
+import {
+  updateStateTree,
+  removeStateAtPath,
+  addStateAtPath,
+} from "./helpers/index"
+import { mountComponent } from "./reducerHandlers/index"
 import { Action } from "./types"
 
 const initialState = {}
 
 const reducer = (state: object = initialState, action: Action) => {
-  // console.log(JSON.stringify(action, null, 2))
-
   switch (action.type) {
     case UPDATE_STATE: {
       const { componentPath, state: componentState } = action.payload
@@ -14,7 +17,7 @@ const reducer = (state: object = initialState, action: Action) => {
     }
     case MOUNT_COMPONENT: {
       const { componentPath, state: componentState } = action.payload
-      return addStateAtPath(state, componentPath, componentState)
+      return mountComponent(state, componentPath, componentState)
     }
     case UNMOUNT_COMPONENT: {
       const { componentPath } = action.payload

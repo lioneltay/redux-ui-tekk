@@ -24,7 +24,7 @@ export interface UIProps {
 }
 
 interface UIConfig {
-  key?: string
+  key?: any
   initialState?: object
   selector?(state: any, props?: any, wholeState?: any): any
   reducer?: { [key: string]: Reducer }
@@ -41,8 +41,6 @@ const ui = ({
   selector = noop,
   reducer,
 }: UIConfig = defaultConfig) => (Comp: Component) => {
-  const generatedKey = key || generateKey(Comp)
-
   const EnhancedComp = pure(Comp)
 
   @connect(
@@ -80,7 +78,9 @@ const ui = ({
     constructor(props: UIProps, context: object) {
       super(props, context)
 
-      this.key = generatedKey
+      this.key = key
+        ? typeof key === "function" ? key(props) : key
+        : generateKey(Comp)
       this.componentPath = (this.context.componentPath || []).concat(this.key)
     }
 
@@ -123,7 +123,11 @@ const ui = ({
           : componentState
       )
 
-      return selector(localState, this.props, this.props.wholeState)
+      return selector(
+        localState,
+        this.props,
+        R.merge(this.props.wholeState, { __uiState: localState })
+      )
     }
 
     render() {

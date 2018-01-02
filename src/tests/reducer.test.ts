@@ -18,23 +18,7 @@ test("mountComponent:", () => {
     })
   )
 
-  expect(store.getState()).toEqual({
-    root: {
-      state: {
-        root: "root",
-      },
-      child: {
-        state: {
-          child: "child",
-        },
-      },
-    },
-    root2: {
-      state: {
-        root2: "root2",
-      },
-    },
-  })
+  expect(store.getState()).toMatchSnapshot()
 })
 
 test("unmountComponent:", () => {
