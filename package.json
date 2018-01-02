@@ -1,6 +1,6 @@
 {
   "name": "redux-ui-tekk",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "UI state management for React with Redux",
   "main": "build/index.js",
   "repository": {
@@ -71,7 +71,14 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": ["ts", "tsx", "js", "jsx", "json", "node"],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
     "testEnvironment": "jsdom"
   }
 }
