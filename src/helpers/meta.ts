@@ -9,3 +9,7 @@ interface MetaData {
 export const addMetaData = (uiState: UIState, metaData: MetaData) => {
   return R.assocPath(["__meta", metaData.key], metaData, uiState)
 }
+
+export const removeMetaData = (uiState: UIState, key) => {
+  return R.dissocPath(["__meta", key], uiState)
+}

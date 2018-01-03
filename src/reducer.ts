@@ -4,7 +4,7 @@ import {
   removeStateAtPath,
   addStateAtPath,
 } from "./helpers/index"
-import { mountComponent } from "./reducerHandlers/index"
+import { mountComponent, unmountComponent } from "./reducerHandlers/index"
 import { Action } from "./types"
 
 const initialState = {}
@@ -21,7 +21,7 @@ const reducer = (state: object = initialState, action: Action) => {
     }
     case UNMOUNT_COMPONENT: {
       const { componentPath } = action.payload
-      return removeStateAtPath(state, componentPath)
+      return unmountComponent(state, componentPath)
     }
     default: {
       return state

@@ -99,7 +99,7 @@ const ui = ({
     }
 
     componentWillUnmount() {
-      this.props.unmountComponent(this.componentPath)
+      this.props.unmountComponent({ componentPath: this.componentPath })
     }
 
     updateState = (state: object) => {
