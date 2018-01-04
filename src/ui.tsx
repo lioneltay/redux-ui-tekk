@@ -74,10 +74,12 @@ const ui = ({
 
     key: string
     componentPath: string[]
+    mounted: boolean
 
     constructor(props: UIProps, context: object) {
       super(props, context)
 
+      this.mounted = false
       this.key = key
         ? typeof key === "function" ? key(props) : key
         : generateKey(Comp)
@@ -98,6 +100,10 @@ const ui = ({
       })
     }
 
+    componentDidMount() {
+      this.mounted = true
+    }
+
     componentWillUnmount() {
       this.props.unmountComponent({ componentPath: this.componentPath })
     }
@@ -111,33 +117,51 @@ const ui = ({
         return {}
       }
 
+      /**
+       * Although actions dispatch synchronously, actions dispatched in
+       * componentWillMount will not affect the current render (unlike setState).
+       * However, the store state will be updated before rendering continues.
+       * So for the first render where state is initialised, we will get the
+       * state directly from the store.
+       */
+      if (!this.mounted) {
+        const initUIState = this.context.store.getState().ui
+
+        const initAccessibleState = getAccessibleState(
+          initUIState,
+          this.componentPath
+        )
+        const initLocalState =
+          callIfFunc(
+            [initAccessibleState, this.props, this.props.wholeState],
+            initialState
+          ) || {}
+
+        const relevantUIState = R.merge(initAccessibleState, initLocalState)
+
+        return selector(
+          relevantUIState,
+          this.props,
+          R.merge(this.props.wholeState, { __uiState: relevantUIState })
+        )
+      }
+
       const { uiState } = this.props
 
-      const componentState = getStateAtPath(uiState, this.componentPath)
-      const accessibleState = getAccessibleState(uiState, this.componentPath)
-
-      const localState = R.merge(
-        accessibleState,
-        !componentState || R.isEmpty(componentState)
-          ? callIfFunc([this.props, this.props.wholeState], initialState)
-          : componentState
-      )
+      const accessibleState =
+        getAccessibleState(uiState, this.componentPath) || {}
 
       return selector(
-        localState,
+        accessibleState,
         this.props,
-        R.merge(this.props.wholeState, { __uiState: localState })
+        R.merge(this.props.wholeState, { __uiState: accessibleState })
       )
     }
 
     render() {
       const { uiState, ...rest } = this.props
-      const stateInitialised = !!getStateAtPath(
-        this.props.uiState,
-        this.componentPath
-      )
 
-      return !stateInitialised ? null : (
+      return (
         <EnhancedComp
           {...rest}
           {...this.getState()}

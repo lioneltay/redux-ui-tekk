@@ -215,8 +215,8 @@ test("ui: ui() can be called without specifying initialState", done => {
   }
 
   @ui({
-    selector: state => ({
-      parent: state.parent,
+    selector: (uiState, props, wholeState) => ({
+      parent: uiState.parent,
     }),
   })
   class ChildComp extends Component {
